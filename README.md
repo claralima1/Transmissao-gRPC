@@ -1,5 +1,4 @@
-# 📚 Estudo de Caso  
-## Transmissão de Mensagem de Texto com gRPC  
+# 📚 Transmissão de Mensagem de Texto com gRPC 
 
 **Linguagens:** Python + Node.js  
 
