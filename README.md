@@ -1,140 +1,97 @@
-# Transmissão de mensagem com gRPC
+# 🚀 Comunicação gRPC entre Dois Computadores
 
-## 📌 Introdução
+## 📋 Visão Geral
 
-Este projeto apresenta um **estudo de caso sobre a transmissão de dados utilizando gRPC**, demonstrando a comunicação entre sistemas desenvolvidos em **Python** e **Node.js**. O objetivo é evidenciar o uso do gRPC como alternativa eficiente ao modelo tradicional REST, especialmente em arquiteturas de microsserviços.
+Este projeto implementa **comunicação bidirecional simples** entre **2 computadores** usando **gRPC**:
 
-O estudo implementa a transmissão de **mensagens de texto** entre um servidor em **Python** e um cliente intermediário em **Node.js**, com uma **interface web** para interação do usuário.
+- **Computador A**: Cliente Python que conecta ao servidor
+- **Computador B**: Servidor Python que aguarda conexão
 
----
-
-## 🎯 Objetivos do Projeto
-
-* Implementa comunicação **exclusiva via gRPC** entre serviços
-* Utiliza **Python** e **Node.js**
-* Garante interoperabilidade por meio de **Protocol Buffers**
-* Disponibiliza uma **interface gráfica intuitiva** para o usuário
-* Demonstra um cenário real de **API Gateway**
+Ambos podem enviar e receber mensagens **simultaneamente**.
 
 ---
 
-## 🧠 Arquitetura da Solução
-
-A arquitetura adotada segue o padrão de **API Gateway**, amplamente utilizado em sistemas distribuídos:
+## 🧩 Arquitetura
 
 ```
-[ Interface Web ]
-        ↓ HTTP
-[ Node.js (API Gateway) ]
-        ↓ gRPC
-[ Servidor Python ]
-```
-
-### Descrição das Camadas
-
-* **Interface Web (HTML + CSS)**
-  Responsável pela interação com o usuário.
-
-* **Node.js (Gateway)**
-  Recebe requisições HTTP da interface e realiza a comunicação gRPC com o servidor Python.
-
-* **Servidor Python (gRPC)**
-  Processa a mensagem recebida e retorna uma resposta via gRPC.
-
----
-
-## 🧩 Tecnologias Utilizadas
-
-* **gRPC** – Comunicação remota de alta performance
-* **Protocol Buffers (protobuf)** – Definição do contrato de dados
-* **Python** – Implementação do servidor gRPC
-* **Node.js** – Implementação do API Gateway
-* **HTML e CSS** – Interface gráfica
-
----
-
-## 📁 Estrutura do Projeto
-
-```
-grpc-estudo-caso/
-├── proto/
-│   └── mensagem.proto
-├── servidor-python/
-│   └── server.py
-└── cliente-node/
-    ├── server.js
-    ├── index.html
-    ├── package.json
-    └── node_modules/
+┌──────────────────────┐          ┌──────────────────────┐
+│   Computador A       │          │   Computador B       │
+│   (Cliente)          │          │   (Servidor)         │
+│                      │          │                      │
+│ ┌─────────────────┐  │ gRPC     │ ┌─────────────────┐  │
+│ │ Python Client   │◄─┼──────────┼─┤ Python Server   │  │
+│ │                 │  │ :50051   │ │                 │  │
+│ └─────────────────┘  │          │ └─────────────────┘  │
+│                      │          │                      │
+│  Terminal/Entrada   │          │  Terminal/Entrada    │
+└──────────────────────┘          └──────────────────────┘
 ```
 
 ---
 
-## 📄 Definição do Contrato gRPC
+## ⚙️ Instalação
 
-O arquivo `.proto` define o serviço e as mensagens trocadas entre os sistemas.
-
-```proto
-syntax = "proto3";
-
-package mensagem;
-
-service MensagemService {
-  rpc EnviarMensagem (MensagemRequest) returns (MensagemResponse);
-}
-
-message MensagemRequest {
-  string texto = 1;
-}
-
-message MensagemResponse {
-  string resposta = 1;
-}
-```
-
----
-
-## ⚙️ Funcionamento do Sistema
-
-1. O usuário digita uma mensagem na interface web
-2. A interface envia a mensagem via HTTP para o Node.js
-3. O Node.js encaminha a mensagem ao servidor Python usando gRPC
-4. O servidor Python processa a mensagem e retorna uma resposta
-5. A resposta é exibida na interface web
-
----
-
-## ▶️ Execução do Projeto
-
-### 1️⃣ Iniciar o Servidor Python
+### 1️⃣ Em ambos os computadores:
 
 ```bash
-cd servidor-python
-python server.py
-```
+# Clone o repositório
+git clone <seu-repo>
+cd grpc-estudo-caso/proto/servidor-python
 
-### 2️⃣ Iniciar o Gateway Node.js
+# Crie um ambiente virtual
+python3 -m venv venv
+source venv/bin/activate  # Linux/Mac
+# venv\Scripts\activate   # Windows
 
-```bash
-cd cliente-node
-node server.js
-```
-
-### 3️⃣ Acessar a Interface
-
-Abra o navegador e acesse:
-
-```
-http://localhost:3000
+# Instale as dependências
+pip install -r requirements.txt
 ```
 
 ---
 
-## ✅ Resultados Obtidos
+## 🚀 Execução
 
-* Comunicação bem-sucedida entre Python e Node.js
-* Transmissão de dados realizada exclusivamente via gRPC
-* Interface intuitiva para envio e recebimento de mensagens
-* Arquitetura modular e desacoplada
+### 📍 No Computador B (Servidor) - PRIMEIRO
 
+```bash
+cd grpc-estudo-caso/proto/servidor-python
+source venv/bin/activate  # ou venv\Scripts\activate no Windows
+python3 server.py
+```
+
+
+### 📍 No Computador A (Cliente) - DEPOIS
+
+```bash
+cd grpc-estudo-caso/proto/servidor-python
+source venv/bin/activate  # ou venv\Scripts\activate no Windows
+python3 cliente.py
+```
+
+**Você será solicitado:**
+1. **IP do Computador B**: Digite o IP (ex: `192.168.1.100:50051`)
+   - Se na mesma máquina: `localhost:50051`
+2. **Seu nome**: Digite um identificador (ex: `Alice`)
+
+---
+
+## 💬 Como Usar
+
+Após conectar, ambos podem digitar mensagens que serão entregues simultaneamente:
+
+**Computador B (Servidor):**
+```
+[12:34:56] 📨 Mensagem recebida de Alice:
+   "Olá, tudo bem?"
+
+[12:34:58] ✅ Confirmação enviada
+```
+
+**Computador A (Cliente):**
+```
+[Alice] Digite uma mensagem (ou 'sair'): Olá, tudo bem?
+   📤 Enviando para Computador B: Olá, tudo bem?
+
+✅ [12:34:58] SERVIDOR_B: Mensagem recebida pelo Servidor (Computador B)
+```
 
