@@ -3,13 +3,22 @@ syntax = "proto3";
 package mensagem;
 
 service MensagemService {
+  // Comunicação Bidirecional: Servidor e Cliente podem enviar mensagens simultaneamente
+  rpc ComunicacaoBidirecional (stream MensagemRequest) returns (stream MensagemResponse);
+  
+  // Mantém compatibilidade com versão anterior
   rpc EnviarMensagem (MensagemRequest) returns (MensagemResponse);
 }
 
 message MensagemRequest {
   string texto = 1;
+  string remetente = 2;
+  int64 timestamp = 3;
 }
 
 message MensagemResponse {
   string resposta = 1;
+  string remetente = 2;
+  int64 timestamp = 3;
+  string status = 4;
 }
