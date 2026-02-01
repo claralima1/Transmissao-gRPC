@@ -14,6 +14,11 @@ class MensagemServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
+        self.ComunicacaoBidirecional = channel.stream_stream(
+                '/mensagem.MensagemService/ComunicacaoBidirecional',
+                request_serializer=mensagem__pb2.MensagemRequest.SerializeToString,
+                response_deserializer=mensagem__pb2.MensagemResponse.FromString,
+                )
         self.EnviarMensagem = channel.unary_unary(
                 '/mensagem.MensagemService/EnviarMensagem',
                 request_serializer=mensagem__pb2.MensagemRequest.SerializeToString,
@@ -24,8 +29,16 @@ class MensagemServiceStub(object):
 class MensagemServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
+    def ComunicacaoBidirecional(self, request_iterator, context):
+        """Comunicação Bidirecional: Servidor e Cliente podem enviar mensagens simultaneamente
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def EnviarMensagem(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Mantém compatibilidade com versão anterior
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -33,6 +46,11 @@ class MensagemServiceServicer(object):
 
 def add_MensagemServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
+            'ComunicacaoBidirecional': grpc.stream_stream_rpc_method_handler(
+                    servicer.ComunicacaoBidirecional,
+                    request_deserializer=mensagem__pb2.MensagemRequest.FromString,
+                    response_serializer=mensagem__pb2.MensagemResponse.SerializeToString,
+            ),
             'EnviarMensagem': grpc.unary_unary_rpc_method_handler(
                     servicer.EnviarMensagem,
                     request_deserializer=mensagem__pb2.MensagemRequest.FromString,
@@ -47,6 +65,23 @@ def add_MensagemServiceServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class MensagemService(object):
     """Missing associated documentation comment in .proto file."""
+
+    @staticmethod
+    def ComunicacaoBidirecional(request_iterator,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.stream_stream(request_iterator, target, '/mensagem.MensagemService/ComunicacaoBidirecional',
+            mensagem__pb2.MensagemRequest.SerializeToString,
+            mensagem__pb2.MensagemResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def EnviarMensagem(request,
