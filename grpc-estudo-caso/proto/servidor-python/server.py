@@ -17,13 +17,13 @@ fila_mensagens_servidor = queue.Queue()
 
 
 class MensagemServicer(mensagem_pb2_grpc.MensagemServiceServicer):
-    """Implementação do serviço para comunicação com um único cliente"""
+    #Implementação do serviço para comunicação com um único cliente
 
     def ComunicacaoBidirecional(self, request_iterator, context):
-        """
-        Implementa comunicação bidirecional entre 2 computadores.
-        Computador A (cliente) envia e recebe do Computador B (servidor).
-        """
+        
+        # Implementa comunicação bidirecional entre os dois computadores
+        # Computador A (cliente) envia e recebe do Computador B (servidor)
+        
         global cliente_conectado
         
         cliente_id = id(context)
@@ -114,10 +114,10 @@ class MensagemServicer(mensagem_pb2_grpc.MensagemServiceServicer):
             print(f"   Servidor aguardando nova conexão...\n")
 
     def EnviarMensagem(self, request, context):
-        """
-        Método compatível com versão anterior.
-        Processa uma mensagem única sem streaming.
-        """
+        
+        #Método compatível com versão anterior
+        #Processa uma mensagem única 
+     
         timestamp = datetime.now().strftime("%H:%M:%S")
         print(f"[{timestamp}] 📨 Mensagem HTTP recebida: {request.texto}\n")
         
@@ -130,7 +130,7 @@ class MensagemServicer(mensagem_pb2_grpc.MensagemServiceServicer):
 
 
 def servir():
-    """Inicia o servidor gRPC no Computador B"""
+    #Inicia o servidor gRPC no Computador B
     porta = 50051
     
     # Cria o servidor gRPC
@@ -162,14 +162,14 @@ def servir():
     
     # Thread para ler inputs do servidor
     def thread_input_servidor():
-        """Lê mensagens do terminal do servidor e envia para o cliente"""
+        #Lê mensagens do terminal do servidor e envia para o cliente
         while True:
             try:
                 with lock_cliente:
                     if cliente_conectado is None:
                         continue
                 
-                # Lê input do usuário
+              
                 mensagem = input(f"\n[SERVIDOR] Digite uma mensagem (ou 'sair'): ").strip()
                 
                 if mensagem.lower() == 'sair':

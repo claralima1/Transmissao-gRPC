@@ -6,14 +6,9 @@ import mensagem_pb2 as mensagem__pb2
 
 
 class MensagemServiceStub(object):
-    """Missing associated documentation comment in .proto file."""
+    #Missing associated documentation comment in .proto file
 
     def __init__(self, channel):
-        """Constructor.
-
-        Args:
-            channel: A grpc.Channel.
-        """
         self.ComunicacaoBidirecional = channel.stream_stream(
                 '/mensagem.MensagemService/ComunicacaoBidirecional',
                 request_serializer=mensagem__pb2.MensagemRequest.SerializeToString,
@@ -27,18 +22,16 @@ class MensagemServiceStub(object):
 
 
 class MensagemServiceServicer(object):
-    """Missing associated documentation comment in .proto file."""
-
     def ComunicacaoBidirecional(self, request_iterator, context):
-        """Comunicação Bidirecional: Servidor e Cliente podem enviar mensagens simultaneamente
-        """
+        # Servidor e Cliente podem enviar mensagens simultaneamente
+        
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def EnviarMensagem(self, request, context):
-        """Mantém compatibilidade com versão anterior
-        """
+        #Mantém compatibilidade com versão anterior
+        
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -64,7 +57,6 @@ def add_MensagemServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class MensagemService(object):
-    """Missing associated documentation comment in .proto file."""
 
     @staticmethod
     def ComunicacaoBidirecional(request_iterator,

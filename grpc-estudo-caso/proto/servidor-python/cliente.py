@@ -16,7 +16,7 @@ import mensagem_pb2_grpc
 
 class ClienteGRPC:
     def __init__(self, endereco_servidor, nome_cliente="Computador-A"):
-        """Inicializa o cliente gRPC"""
+        #Inicializa o cliente gRPC
         self.endereco_servidor = endereco_servidor
         self.nome_cliente = nome_cliente
         self.canal = None
@@ -25,7 +25,6 @@ class ClienteGRPC:
         self.conectado = False
 
     def conectar(self):
-        """Conecta ao servidor gRPC remoto (Computador B)"""
         try:
             print(f"\n Conectando ao Computador B em {self.endereco_servidor}...")
             self.canal = grpc.insecure_channel(self.endereco_servidor)
@@ -39,12 +38,12 @@ class ClienteGRPC:
             return False
 
     def criar_stream_bidirecional(self):
-        """Cria um stream bidirecional com o servidor"""
+        #Cria um stream bidirecional com o servidor
         try:
             print("\n Iniciando comunicação bidirecional com Computador B...")
             
             def gerar_mensagens():
-                """Gerador que envia mensagens para o servidor"""
+                #Gerador que envia mensagens para o servidor
                 while self.conectado:
                     try:
                         # Obtém input do usuário
@@ -83,7 +82,7 @@ class ClienteGRPC:
             print(f" Erro: {e}")
 
     def receber_mensagens(self):
-        """Recebe mensagens do Computador B"""
+        #Recebe mensagens do Computador B
         try:
             for resposta in self.stream:
                 timestamp = datetime.fromtimestamp(resposta.timestamp / 1000).strftime("%H:%M:%S")
@@ -105,7 +104,6 @@ class ClienteGRPC:
             self.conectado = False
 
     def desconectar(self):
-        """Desconecta do servidor"""
         try:
             if self.stream:
                 self.stream.cancel()
@@ -115,7 +113,6 @@ class ClienteGRPC:
 
 
 def main():
-    """Função principal - Computador A (Cliente)"""
     print("""
 ╔════════════════════════════════════════════════════════════╗
 ║      🖥️  Computador A - Cliente gRPC Python                ║
